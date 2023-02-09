@@ -1,20 +1,14 @@
 %{
-int line_number = 1;
+int yylineno;
 %}
-line .*\n    
 %%
-
-{line} { printf("%10d %s", line_number++, yytext); }
-
+^(.*)\n printf("%4d\t%s", ++yylineno, yytext);
 %%
-
-int yywrap(){}
-
-int main(int argc, char*argv[])
-{
-printf("enter the input:");
-extern FILE *yyin; 
-yyin = fopen("testtest.c","r"); 
+int yywrap(void) {
+return 1;
+}
+int main(int argc, char *argv[]) {
+yyin = fopen(argv[1], "r");
 yylex();
-return 0;
+fclose(yyin);
 }
